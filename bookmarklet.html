@@ -1,0 +1,94 @@
+<html>
+  <!-- Actual login code -->
+  <script type="text/javascript" id="bookmarkletscript">
+    var alpha = 'ABCDEFGHIJ';
+    var usrNameElements = document.getElementsByName('usr_name');
+    var usrPasswordElements = document.getElementsByName('usr_password');
+    var message3Elements = document.getElementsByName('message3');
+    var message4Elements = document.getElementsByName('message4');
+    var message5Elements = document.getElementsByName('message5');
+    var OKElements = document.getElementsByName('OK');
+    var frame = document.createElement("frame");
+    if (usrNameElements.length == 1 &&
+        usrPasswordElements.length == 1 &&
+        OKElements.length == 1) {
+      usrNameElements[0].value = username;
+      usrPasswordElements[0].value = password;
+      OKElements[0].click();
+    } else if (message5Elements.length == 1 &&
+        message4Elements.length == 1 &&
+        message5Elements.length == 1) {
+      var field1 = message3Elements[0].parentElement.parentElement.firstElementChild.firstChild.data;
+      var field2 = message4Elements[0].parentElement.parentElement.firstElementChild.firstChild.data;
+      var field3 = message5Elements[0].parentElement.parentElement.firstElementChild.firstChild.data;
+      var field1I = alpha.indexOf(field1[1]);
+      var field1J = parseInt(field1[3], 10);
+      var field2I = alpha.indexOf(field2[1]);
+      var field2J = parseInt(field2[3], 10);
+      var field3I = alpha.indexOf(field3[1]);
+      var field3J = parseInt(field3[3], 10);
+      message3Elements[0].value = matrix[(((field1J - 1) * 10) + field1I)];
+      message4Elements[0].value = matrix[(((field2J - 1) * 10) + field2I)];
+      message5Elements[0].value = matrix[(((field3J - 1) * 10) + field3I)];
+      OKElements[0].click();
+    }
+
+    function() {
+      var url = "https://portal.nap.gsic.titech.ac.jp/GetAccess/Login";
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, false);
+      xhr.onreadystatechange = function(e) {console.log(e)};
+      var data = {
+        'usr_name': '12M34567',
+        'usr_password': 'yourPass',
+        'AUTHMETHOD': 'UserPassword',
+        'LOCALE': 'ja_JP',
+        'pageGenTime': '1365474630975',
+        'Template': 'userpass_key',
+        'HiddenURI': 'https://portal.nap.gsic.titech.ac.jp/GetAccess/ResourceList',
+        'OK': 'OK',
+        'AUTHTYPE': null
+      };
+      xhr.send(data);
+    }
+  </script>
+  <body>
+    <label for="username">Account</label>
+    <input type="text" id="username" placeholder="ex. 12M34567" />
+    <br />
+
+    <label for="username">Password</label>
+    <input type="text" id="password" placeholder="ex. aBcDeFgH" />
+    <br />
+
+    <label for="username">Matrix</label>
+    <input type="text" id="matrix" placeholder="Entire matrix as one string" />
+    <br />
+
+    <a href="" id="bookmarkleta">TiTLogin</a>
+  </body>
+  <!-- Bookmarklet creation code -->
+  <script type="text/javascript">
+    function updateBookmarklet() {
+      var userinfo = (
+          'var username=\'' +
+          document.getElementById('username').value +
+          '\';var password=\'' +
+          document.getElementById('password').value +
+          '\';var matrix=\'' +
+          document.getElementById('matrix').value +
+          '\';'
+          );
+      var scriptText = document.getElementById(
+          'bookmarkletscript').innerText.split('\n').join(';');
+      document.getElementById('bookmarkleta').href = (
+          'javascript:(function(){' +
+          userinfo +
+          scriptText +
+          '})()');
+    }
+    document.getElementById('username').onchange = updateBookmarklet;
+    document.getElementById('password').onchange = updateBookmarklet;
+    document.getElementById('matrix').onchange = updateBookmarklet;
+  </script>
+</html>
